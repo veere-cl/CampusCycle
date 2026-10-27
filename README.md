@@ -11,6 +11,14 @@ A campus bicycle rental website built with JavaScript, AngularJS, and Node.js. T
 
 The app has no npm dependencies. It loads AngularJS and fonts from public CDNs, so an internet connection is needed for those assets. The Node server creates `data/store.json` if it does not exist. Inventory and reservations are saved there and remain after a restart.
 
+## Get a live demo link
+
+Click the button to create a free Render web service from this repository:
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/veere-cl/CampusCycle)
+
+Sign in to Render, review the service settings, and approve the deployment. Render provides the public `onrender.com` link when the first deploy finishes. The free service can sleep after 15 minutes without visits, so its first page load may take a little longer. This demo stores rentals in a local JSON file; free hosting does not preserve that file across restarts or redeployments. Use a production database before relying on rental data.
+
 ## API
 
 - `GET /api/bikes` — list campus bikes and availability
