@@ -1,0 +1,9 @@
+{
+  "name": "campus-bicycle-rental",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A JavaScript and AngularJS campus bicycle rental prototype",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en" ng-app="campusCycle">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f5ef">
+  <title>Campus Cycle — Find your ride</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="extras.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body ng-controller="RentalController as vm">
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Campus Cycle home"><span class="brand-mark">↗</span><span>campus<span class="brand-light">cycle</span></span></a>
+    <nav class="nav-links" aria-label="Main navigation"><a class="active" href="#bikes">Find a bike</a><a href="#how-it-works">How it works</a><a href="#locations">Locations</a></nav>
+    <div class="nav-right"><button class="profile" ng-click="vm.showRentals = !vm.showRentals" aria-label="View my rentals"><span class="avatar">JD</span><span class="profile-name">My rentals</span><span class="chevron">⌄</span></button></div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy"><div class="eyebrow"><span class="live-dot"></span> YOUR CAMPUS, ON TWO WHEELS</div><h1>Make every<br>minute <em>count.</em></h1><p>Skip the long way around. Grab a bike, get where you’re going, and keep campus moving.</p><a class="text-link" href="#how-it-works">The easy way to get around <span>↗</span></a></div>
+      <div class="hero-art" aria-label="Illustration of a bicycle ready for a campus ride"><div class="sun"></div><div class="art-label">RIDE MORE, WAIT LESS <span>✳</span></div><div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div><div class="bike-illustration"><div class="bike-wheel wheel-left"></div><div class="bike-wheel wheel-right"></div><div class="bike-frame"><span class="frame-a"></span><span class="frame-b"></span><span class="frame-c"></span><span class="frame-d"></span><span class="seat"></span><span class="handle"></span><span class="pedal"></span></div></div><div class="art-caption">A little fresh air<br>between classes.</div><div class="art-spark">✳</div></div>
+    </section>
+
+    <section class="booking-wrap" id="bikes">
+      <div class="section-heading"><div><span class="section-kicker">READY WHEN YOU ARE</span><h2>Find your ride</h2></div><div class="availability"><span class="live-dot"></span> {{ vm.availableCount || 0 }} bikes available now</div></div>
+      <div class="service-error" ng-if="vm.loadError"><span>{{vm.loadError}}</span><button ng-click="vm.refresh()">Try again</button></div>
+      <div class="loading-note" ng-if="vm.loading">Loading campus bikes…</div>
+      <div class="filters"><label class="search-box"><span class="search-icon">⌕</span><input ng-model="vm.search" placeholder="Search bikes or locations" aria-label="Search bikes or locations"><kbd>⌘ K</kbd></label><label class="select-wrap"><span class="filter-label">PICKUP AT</span><select ng-model="vm.station"><option value="">All locations</option><option ng-repeat="station in vm.stations" value="{{station}}">{{station}}</option></select><span class="select-caret">⌄</span></label><label class="select-wrap duration"><span class="filter-label">DURATION</span><select ng-model="vm.duration"><option value="1">1 hour</option><option value="2">2 hours</option><option value="4">4 hours</option><option value="8">All day</option></select><span class="select-caret">⌄</span></label><button class="filter-button" ng-click="vm.showAvailableOnly = !vm.showAvailableOnly" ng-class="{'filter-on': vm.showAvailableOnly}"><span>☷</span> {{ vm.showAvailableOnly ? 'Available only' : 'Filters' }}<b ng-if="vm.showAvailableOnly">✓</b></button></div>
+
+      <div class="bike-grid">
+        <article class="bike-card" ng-repeat="bike in vm.filteredBikes() track by bike.id" ng-class="{'unavailable-card': !bike.available}">
+          <div class="bike-photo" ng-class="bike.colorClass"><span class="bike-tag" ng-class="{'tag-unavailable': !bike.available}"><i></i>{{ bike.available ? 'AVAILABLE' : 'IN USE' }}</span><span class="bike-number">{{bike.id}}</span><div class="mini-bike"><div class="mini-wheel left"></div><div class="mini-wheel right"></div><div class="mini-frame"><span class="seg s1"></span><span class="seg s2"></span><span class="seg s3"></span><span class="seg s4"></span><span class="mini-seat"></span><span class="mini-handle"></span></div></div><span class="photo-spark">✳</span></div>
+          <div class="bike-info"><div class="bike-title-row"><h3>{{bike.name}}</h3><span class="rating">★ {{bike.rating}}</span></div><div class="bike-meta"><span>⌖ {{bike.station}}</span><span class="dot-sep">·</span><span>{{bike.type}}</span></div><div class="bike-bottom"><div class="price"><strong>${{bike.rate}}</strong><span>/ hour</span></div><button class="rent-button" ng-disabled="!bike.available" ng-click="vm.openBooking(bike)">{{bike.available ? 'Rent bike' : 'Unavailable'}} <span>↗</span></button></div></div>
+        </article>
+        <div class="empty-state" ng-if="vm.filteredBikes().length === 0"><span>⌕</span><h3>No bikes found</h3><p>Try a different search or pickup location.</p><button ng-click="vm.resetFilters()">Clear filters</button></div>
+      </div>
+      <div class="browse-row"><span>Showing {{vm.filteredBikes().length}} of {{vm.bikes.length}} bikes</span><button ng-click="vm.showAll = !vm.showAll">{{ vm.showAll ? 'Show featured bikes' : 'View all bikes' }} <span>→</span></button></div>
+    </section>
+
+    <section class="how-section" id="how-it-works"><div class="how-title"><span class="section-kicker">NO HASSLE, JUST PEDAL</span><h2>Three steps to<br>your next class.</h2><p>Campus travel should be the easiest part of your day. Here’s how we make it happen.</p></div><div class="steps"><div class="step"><span class="step-num">01</span><div class="step-icon">⌕</div><h3>Find your bike</h3><p>Pick a nearby station and choose the ride that fits your day.</p></div><div class="step"><span class="step-num">02</span><div class="step-icon key-icon">⌁</div><h3>Unlock & go</h3><p>Book in seconds, then unlock with the code in your confirmation.</p></div><div class="step"><span class="step-num">03</span><div class="step-icon return-icon">↗</div><h3>Park it anywhere</h3><p>Return your bike to any campus station when you’re done.</p></div></div></section>
+    <footer id="locations"><a class="brand footer-brand" href="#top"><span class="brand-mark">↗</span><span>campus<span class="brand-light">cycle</span></span></a><span>Made for campus life. <span class="footer-dot">●</span> Get there your way.</span><a class="footer-link" href="mailto:hello@campuscycle.example">Need a hand? <b>Contact us ↗</b></a></footer>
+  </main>
+
+  <div class="modal-backdrop" ng-if="vm.selectedBike" ng-click="vm.closeBooking()" ng-keydown="$event.key === 'Escape' && vm.closeBooking()">
+    <section class="booking-modal" role="dialog" aria-modal="true" aria-labelledby="booking-title" ng-click="$event.stopPropagation()"><button class="modal-close" ng-click="vm.closeBooking()" aria-label="Close">×</button><span class="section-kicker">YOUR NEXT RIDE</span><h2 id="booking-title">Book {{vm.selectedBike.name}}</h2><p class="modal-location">⌖ {{vm.selectedBike.station}} <span>·</span> {{vm.selectedBike.type}}</p><div class="booking-summary"><span>Duration</span><strong>{{vm.duration}} {{vm.duration == 1 ? 'hour' : 'hours'}}</strong><span>Estimated total</span><strong>${{vm.selectedBike.rate * vm.duration}}.00</strong></div><label class="modal-field">Start time <input type="time" ng-model="vm.startTime" required></label><p class="booking-error" ng-if="vm.bookingError">{{vm.bookingError}}</p><button class="confirm-button" ng-disabled="vm.savingBooking" ng-click="vm.confirmBooking()">{{vm.savingBooking ? 'Saving reservation…' : 'Confirm rental'}} <span>→</span></button><p class="fine-print">You can cancel for free before your ride starts.</p></section>
+  </div>
+  <div class="modal-backdrop" ng-if="vm.showRentals" ng-click="vm.showRentals = false">
+    <section class="booking-modal rentals-modal" role="dialog" aria-modal="true" aria-labelledby="rentals-title" ng-click="$event.stopPropagation()"><button class="modal-close" ng-click="vm.showRentals = false" aria-label="Close">×</button><span class="section-kicker">YOUR ACCOUNT</span><h2 id="rentals-title">My rentals</h2><p class="modal-location">Your reservations stay saved on this device.</p><p class="booking-error" ng-if="vm.bookingError">{{vm.bookingError}}</p><div class="rental-list" ng-if="vm.bookings.length"><article class="rental-row" ng-repeat="booking in vm.bookings"><div class="rental-status" ng-class="{'cancelled-status': booking.status === 'cancelled'}">{{booking.status}}</div><strong>{{booking.bikeName}}</strong><small>{{booking.station}} · {{booking.duration}} {{booking.duration === 1 ? 'hour' : 'hours'}} · {{booking.startTime}}</small><div class="rental-row-bottom"><span>Ref {{booking.code}} · ${{booking.total}}.00</span><button ng-if="booking.status === 'active'" ng-click="vm.cancelBooking(booking)">Cancel</button></div></article></div><div class="empty-rentals" ng-if="!vm.bookings.length">No rentals yet. Choose a bike to make your first reservation.</div></section>
+  </div>
+  <div class="toast" ng-if="vm.confirmation"><span>✓</span><div><strong>You're all set!</strong><small>{{vm.confirmation}}</small></div><button ng-click="vm.confirmation = ''" aria-label="Dismiss">×</button></div>
+</body>
+</html>

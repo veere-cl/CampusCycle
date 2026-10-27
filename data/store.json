@@ -1,0 +1,13 @@
+{
+  "bikes": [
+    { "id": "CC-104", "name": "The Commuter", "station": "North Quad", "type": "City bike", "rate": 3, "rating": "4.9", "available": true, "colorClass": "photo-lime" },
+    { "id": "CC-218", "name": "Campus Cruiser", "station": "Student Union", "type": "Hybrid", "rate": 4, "rating": "4.8", "available": true, "colorClass": "photo-peach" },
+    { "id": "CC-076", "name": "The Swift", "station": "Library West", "type": "Road bike", "rate": 5, "rating": "4.9", "available": true, "colorClass": "photo-blue" },
+    { "id": "CC-331", "name": "Easy Rider", "station": "Athletics Center", "type": "City bike", "rate": 3, "rating": "4.7", "available": true, "colorClass": "photo-lavender" },
+    { "id": "CC-159", "name": "Green Machine", "station": "North Quad", "type": "Hybrid", "rate": 4, "rating": "4.8", "available": true, "colorClass": "photo-peach" },
+    { "id": "CC-402", "name": "The Weekender", "station": "Student Union", "type": "Cruiser", "rate": 4, "rating": "4.9", "available": true, "colorClass": "photo-blue" },
+    { "id": "CC-093", "name": "Quickstep", "station": "Library West", "type": "Road bike", "rate": 5, "rating": "4.6", "available": true, "colorClass": "photo-lime" },
+    { "id": "CC-267", "name": "Campus Classic", "station": "Athletics Center", "type": "City bike", "rate": 3, "rating": "4.8", "available": true, "colorClass": "photo-lavender" }
+  ],
+  "bookings": []
+}
